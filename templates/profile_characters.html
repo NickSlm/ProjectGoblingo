@@ -1,0 +1,55 @@
+{% extends 'profile.html' %}
+{%block header%}
+<h1 class="text-white text-center">CHARACTERS</h1>
+{%endblock%}
+{% block characters %}
+<style>
+.card {
+    transition: all 0.2s ease;
+    cursor: pointer
+}
+
+.card:hover {
+    box-shadow: 5px 6px 6px 2px #e9ecef;
+    transform: scale(1.1)
+}
+</style>
+{%for key in char_list.keys()%}
+<h2 class="text-light p-1" style="font-family: Warcraft; color: #FFE4E1;">{{key}}</h2>
+<div class="row row-cols-1 row-cols-md-4 g-4">
+        {%for char in char_list[key]%}
+            {%if char[1] == 'Alliance' %}
+                <div class="col">
+                    <div class="card shadow" style="background-color: #162C57;">
+                        <img src={{char[4]}} class="card-img-top">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush bg-transparent" id="myUL" style="color: #d8d1ca;">
+                                <li class="list-group-item bg-transparent"><b>Name:</b> {{char[0]}}</li>
+                                <li class="list-group-item bg-transparent"><b>Class:</b> {{char[2]}} </li>
+                                <li class="list-group-item bg-transparent"><b>Level:</b> {{char[3]}} </li>
+                                <li class="list-group-item bg-transparent"><b>Gold:</b> {{char[5]}}</li>
+                            </ul>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            {%elif char[1] == 'Horde'%}
+            <div class="col">
+                <div class="card shadow" style="background-color: #8C1616;">
+                    <img src={{char[4]}} class="card-img-top">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush bg-transparent" id="myUL" style="color: #d8d1ca;">
+                            <li class="list-group-item bg-transparent"><b>Name:</b> {{char[0]}}</li>
+                            <li class="list-group-item bg-transparent"><b>Class:</b> {{char[2]}} </li>
+                            <li class="list-group-item bg-transparent"><b>Level:</b> {{char[3]}} </li>
+                            <li class="list-group-item bg-transparent"><b>Gold:</b> {{char[5]}}</li>
+                        </ul>
+                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+        {%endfor%}
+</div>
+{%endfor%}
+{% endblock %}}

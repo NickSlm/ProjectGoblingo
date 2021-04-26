@@ -1,0 +1,191 @@
+{% extends 'layout.html' %}
+
+{% block auction %}
+
+<style>
+  table {
+  position: relative;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+}
+  button:hover{cursor: pointer}
+    button {
+      background: transparent;
+      outline: none;
+      position: relative;
+      border: 2px solid #111;
+      padding: 15px 50px;
+      overflow: hidden;
+    }
+
+    /*button:before (attr data-hover)*/
+    button:hover:before{opacity: 1; transform: translate(0,0);}
+    button:before{
+      content: attr(data-hover);
+      position: absolute;
+      top: 1.1em; left: 0;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-weight: 800;
+      font-size: .8em;
+      opacity: 0;
+      transform: translate(-100%,0);
+      transition: all .3s ease-in-out;
+    }
+      /*button div (button text before hover)*/
+      button:hover div{opacity: 0; transform: translate(100%,0)}
+      button div{
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-weight: 800;
+        font-size: .8em;
+        transition: all .3s ease-in-out;
+      }
+
+</style>
+  <!-- Modal CHOOSE SERVER -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="staticBackdropLabel">Server List</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+      <form action="#" method="POST">
+        <div class="modal-body">
+          <input class="form-control" list="server" name="realm_name" id="exampleDataList" placeholder="Pick a realm...">
+          <datalist id="server">
+            {% for elem in realm_list %}
+            <option value= {{elem}}>
+            {% endfor %}
+          </datalist>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+  </div>
+</div>
+  </div>
+  <!-- MESSAGES -->
+  <div class="container py-5">
+    <div class="row justify-content-md-center">
+      <div class="col-sm-10">
+        {%if not session['server']%}
+        <div class="alert alert-dark" role="alert">
+          Please pick a server!
+        </div>
+        {%endif%}
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-dark alert-dismissible fade show" role="alert">
+          <strong>{{message}}</strong> 
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- SELECT SERVER -->
+    <div class="row justify-content-md-center">
+      <div class="col-lg-10">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <form class="d-flex">
+            {% if session.server%}
+            <button type="button" data-hover="Select Server" data-bs-toggle="modal" data-bs-target="#exampleModal"><div>{{session.server}}</div></button>
+            {%else%}
+            <button type="button" data-hover="Select Server" data-bs-toggle="modal" data-bs-target="#exampleModal"><div>Select your realm</div></button>
+            {%endif%}
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- TABLE -->
+    <div class="row justify-content-md-center p-1">
+      <!-- AUCTION FILTER -->
+      <div class="col-lg-3 shadow" >
+        <div class="container-sm p-0" style="height:600px; overflow-y:overlay;">
+          <form action="#" method="POST">
+            <div class="input-group mb-3">
+              {%if not session['server']%}
+              <input type="text" class="form-control" id="example1" placeholder="Search..."  name="item_name" disabled>
+              <button class="btn btn-dark" type="submit" disabled>Search</button>
+              {%else%}
+              <input type="text" class="form-control" id="example1" placeholder="Search..."  name="item_name">
+              <button class="btn btn-dark" type="submit" style="background-color: black; color: white;">Search</button>
+              {%endif%}
+            </div>
+            <ul class="list-group">            
+              {%for key,value in item_class.items()%}
+              <li class="list-group-item"><input class="form-check-input me-1" type="radio" value='{{value}}' name='my_checkbox'>{{key}}</li>
+              {%endfor%}
+            </ul>
+          </form>
+        </div>
+      </div>
+      <!-- AUCTION TABLE -->
+      <div class="col-lg-7 shadow p-0" >
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 ">
+            <thead style="background-color:#101010; color: white;">
+              <tr>
+                <th class="w-50">Name</th>
+                <th>Price</th>
+                <th>Available</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-responsive bg-light" style="height: 600px; overflow-y: scroll;">
+          <table class="table table-light table-hover">
+            <tbody>
+              {%if item_total%}
+                {%for item in item_total.keys()%}
+                <tr>
+                  <td class="w-50"><img src="{{item_total[item][2]}}" width="30">{{item}}</td>
+                  <td>{{item_total[item][0]}}<img src="{{url_for('static', filename='images/toppng.com-gold-coin-icon-png-2400x2399.png')}}" width="15"/></td>
+                  <td>{{item_total[item][1]}}</td>
+                  <td><button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{loop.index0}}" aria-expanded="false" aria-controls="collapse{{loop.index0}}" style="height: 30px;">View</button></td>
+                </tr>
+                </div>
+                <tr class="accordion-collapse collapse" id="collapse{{loop.index0}}" aria-labelledby="heading{{loop.index0}}">
+                  <td colspan="4">
+                    <table class="table table-secondary table-striped mb-0">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Price</th>
+                          <th>Available</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for obj in item_dict.keys()%}
+                        {%if obj == item%}
+                          {%for a in item_dict[obj] %}
+                            <tr>
+                              <td><img src="{{item_total[item][2]}}" width="30">{{item}}</td>
+                              <td>{{a[0]}}<img src="{{url_for('static', filename='images/toppng.com-gold-coin-icon-png-2400x2399.png')}}" width="15"/></td>
+                              <td>{{a[1]}}</td>
+                            </tr>
+                          {%endfor%}
+                        {%endif%}
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                {%endfor%}
+                {%endif%}
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+  
+
+{% endblock %}
