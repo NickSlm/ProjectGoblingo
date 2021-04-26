@@ -78,16 +78,32 @@ def get_total_mounts():
     return len(available_mounts)
 
 
+def get_total_mounts_info(profile_token):
+    mounts = defaultdict(list)
+    conn = Blizzard()
+    mount_list_collected = conn.get_mounts_list(profile_token)
+    total_mounts = get_total_mounts()
+    cursor.execute("SELECT name, media FROM mounts_db")
+    mounts_data_all = cursor.fetchall()
+    for mount in mounts_data_all:
+        for coll_mount in mount_list_collected:
+            if mount[0] == coll_mount['mount']['name']:
+                mounts[mount[0]].append((mount[1],'collected'))
+                break
+        else:
+            mounts[mount[0]].append((mount[1],'not_collected'))
+    return mounts, total_mounts
+
+
 def get_mount_list_info(profile_token):
     mounts = []
     conn = Blizzard()
-    total_mounts = get_total_mounts()
     mount_list = conn.get_mounts_list(profile_token)
     for mount in mount_list:
         cursor.execute("SELECT name, media FROM mounts_db WHERE id = ?", (mount['mount']['id'],))
         mount_info_list = cursor.fetchall()
         mounts.append({mount_info_list[0][0]: {'media': mount_info_list[0][1]}})
-    return mounts, total_mounts
+    return mounts
  
 # UPDATE ITEM DB
 # cursor.execute('SELECT id FROM item_db WHERE name is null')

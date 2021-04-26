@@ -21,10 +21,6 @@ import datetime
 #             for item_id in auc_data['auctions']:
 #                 print(item_id['item']['id'], file=item_file)
 
-
-
-
-
 # def check_exists(item_id):
 #     cursor.execute("SELECT id from item_db")
 #     id_list = cursor.fetchall()
@@ -42,7 +38,3 @@ import datetime
 #         for id in lines:
 #             check_exists(item_id=id)
 # print("FINISHED")
-
-
-for i in range(1,21):
-    print(i)

@@ -63,13 +63,22 @@ a.disabled_link {
         </ul>
         <!-- PROGRESS BAR -->
         <div class="progress mb-3" style="height: 40px;">
-          <div class="progress-bar bg-success fs-5" role="progressbar" style="width: {{(total * 100) // total_mounts}}%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100">{{(total * 100) // total_mounts}}% ({{total}}/{{total_mounts}})</div>
+          <div class="progress-bar bg-success fs-5" role="progressbar" style="width: {{total_collected_mounts_percent}}%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100">{{total_collected_mounts_percent}}% ({{total_collected_mounts}}/{{total_mounts}})</div>
         </div>
         <!-- NAV CONTENT -->
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-            <h1>ALL</h1>
+            <div class="row row-cols-1 row-cols-md-4" style="height:880px ; overflow:auto;">
+            {%for mount in total_mounts_info.keys()%}
+            <div class="col">
+              <div class="card shadow text-white bg-dark mb-3">
+                  <div class="card-header" style="font-size: small;"><a>{{mount}} {%if total_mounts_info[mount][0][1] == 'collected'%}  <span style="color: yellow;">&#10003;</span>{%endif%}</a></div>
+                  <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
+              </div>
+            </div>
+            {%endfor%}
           </div>
+        </div>
           <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
             <!-- MAIN BODY -->
             <div class="row row-cols-1 row-cols-md-4" style="height:880px ; overflow:auto;">

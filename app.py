@@ -6,7 +6,7 @@ from flask_table import Table, Col
 import sqlite3
 import requests
 # internal imports
-from db import server_names, find_realm_id, find_item_id, get_items, get_total_quantity,get_items_by_type, get_mount_list_info
+from db import server_names, find_realm_id, find_item_id, get_items, get_total_quantity, get_items_by_type, get_mount_list_info, get_total_mounts_info
 from blizzardAPI import Blizzard
 
 
@@ -121,9 +121,14 @@ def profile_characters():
 
 @app.route('/profile/mounts', methods=["POST", "GET"])
 def profile_mounts():
-    mount_data, total_mounts = get_mount_list_info(profile_token=session['access_token'])
-    total = len(mount_data)
-    return render_template('profile_mounts.html',mounts=mount_data, total_mounts=total_mounts, total=total)
+    mount_data = get_mount_list_info(profile_token=session['access_token'])
+    total_mounts_info, total_mounts = get_total_mounts_info(profile_token=session['access_token'])
+    total_collected_mounts = len(mount_data)
+    total_collected_mounts_percent = (total_collected_mounts * 100) // total_mounts
+    return render_template('profile_mounts.html',mounts=mount_data, total_mounts=total_mounts,
+                            total_collected_mounts=total_collected_mounts,
+                            total_collected_mounts_percent=total_collected_mounts_percent,
+                            total_mounts_info=total_mounts_info)
 
 @app.route('/profile/pets', methods=["POST", "GET"])
 def profile_pets():
