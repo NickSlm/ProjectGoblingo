@@ -8,11 +8,11 @@ BLIZZARD_CLIENT_SECRET = "mxzBzxKXxQZsYU3ogGjPhoodi9O6VVmQ"
 connection = sqlite3.connect(r"D:\DATABASE\ape.db",check_same_thread=False)
 cursor = connection.cursor()
 
+
 def get_mount_info(mount_id):
     cursor.execute("SELECT name, media FROM mounts_db WHERE id = ? ", (mount_id,))
     mount_info = cursor.fetchall()
     return mount_info
-
 
 
 class Blizzard:
@@ -112,6 +112,16 @@ class Blizzard:
         resp =  requests.get(url)
         mount_collection = resp.json()
         return mount_collection['mounts']
+
+    def updatet(self, id):
+        auth_token = self._get_token()
+        url = f"https://eu.api.blizzard.com/data/wow/mount/{id}?namespace=static-eu&locale=en_US&access_token={auth_token}"
+        resp =  requests.get(url)
+        mount_collection = resp.json()
+        try:
+            return mount_collection['source']['name']
+        except KeyError:
+            return "..."
 
 
 

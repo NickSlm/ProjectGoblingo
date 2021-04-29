@@ -72,7 +72,8 @@ def get_total_quantity(dict):
 
 
 def get_total_mounts():
-    cursor.execute("SELECT id FROM mounts_db")
+    # TODO: DATABASE GOT DUPLICATES
+    cursor.execute("SELECT name FROM mounts_db")
     mounts_data = cursor.fetchall()
     available_mounts = list(set(mounts_data))
     return len(available_mounts)
@@ -83,15 +84,15 @@ def get_total_mounts_info(profile_token):
     conn = Blizzard()
     mount_list_collected = conn.get_mounts_list(profile_token)
     total_mounts = get_total_mounts()
-    cursor.execute("SELECT name, media FROM mounts_db")
+    cursor.execute("SELECT name, media, description, drops FROM mounts_db")
     mounts_data_all = cursor.fetchall()
     for mount in mounts_data_all:
         for coll_mount in mount_list_collected:
             if mount[0] == coll_mount['mount']['name']:
-                mounts[mount[0]].append((mount[1],'collected'))
+                mounts[mount[0]].append((mount[1],'collected',mount[2],[mount[3]]))
                 break
         else:
-            mounts[mount[0]].append((mount[1],'not_collected'))
+            mounts[mount[0]].append((mount[1],'not_collected',mount[2],[mount[3]]))
     return mounts, total_mounts
 
 
@@ -100,13 +101,19 @@ def get_mount_list_info(profile_token):
     conn = Blizzard()
     mount_list = conn.get_mounts_list(profile_token)
     for mount in mount_list:
-        cursor.execute("SELECT name, media FROM mounts_db WHERE id = ?", (mount['mount']['id'],))
+        cursor.execute("SELECT name, media, description, drops FROM mounts_db WHERE id = ?", (mount['mount']['id'],))
         mount_info_list = cursor.fetchall()
-        mounts.append({mount_info_list[0][0]: {'media': mount_info_list[0][1]}})
+        mounts.append({mount_info_list[0][0]: {'media': mount_info_list[0][1], 'description':mount_info_list[0][2], 'drops': mount_info_list[0][3] }})
     return mounts
  
-# UPDATE ITEM DB
-# cursor.execute('SELECT id FROM item_db WHERE name is null')
+
+
+
+
+
+
+# # UPDATE ITEM DB
+# cursor.execute('SELECT id FROM mounts_db')
 # print("Connected to SQLite")
 # a = cursor.fetchall()
 # conn = Blizzard()
@@ -115,13 +122,12 @@ def get_mount_list_info(profile_token):
 # start_time = datetime.datetime.utcnow()
 # for id in a:
 #     start += 1
-#     item_data = conn.get_item_data(id[0])
-#     sql_update_query = f"""UPDATE item_db set name = ?, media_url = ?, item_class = ?, Item_subclass = ?, inventory_type = ? WHERE id = {id[0]}"""
-#     data = (item_data[0],item_data[1],item_data[2],item_data[3],item_data[4])
+#     item_data = conn.updatet(id[0])
+#     sql_update_query = f"""UPDATE mounts_db set drops = ? WHERE id = {id[0]}"""
+#     data = (item_data,)
 #     cursor.execute(sql_update_query, data)
 #     cursor.connection.commit()
-#     print(f"{start} out of {end}: UPDATED {id[0]} name {item_data[0]}", end='\r')
+#     print(f"{start} out of {end}: UPDATED {id[0]} name {item_data}", end='\r')
 
 # end_time = datetime.datetime.utcnow()
 # print(f"Finished after {end_time - start_time}")
-

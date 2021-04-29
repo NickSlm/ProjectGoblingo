@@ -4,6 +4,15 @@
 {%endblock%}
 {% block mounts %}
 <style>
+  .card{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.2s ease-in-out;
+
+
+  }
+  .card:hover{
+    box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  }
 .pagination a {
     font-size:x-large;
   color: black;
@@ -45,12 +54,21 @@ a.disabled_link {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+  
+}
+
+.card-img-overlay{
+  opacity: 0;
+}
+/* When you mouse over the container, fade in the overlay title */
+.card:hover .card-img-overlay{
+  opacity: 1;
 }
 </style>
-<div class="row justify-content-md-center p-2">
+<div class="row justify-content-md-center p-2" >
     <div class="col-lg">
       <!-- NAV LINKS -->
-      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" >
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
           </li>
@@ -68,26 +86,38 @@ a.disabled_link {
         <!-- NAV CONTENT -->
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-            <div class="row row-cols-1 row-cols-md-4" style="height:880px ; overflow:auto;">
+            <!-- ALL MOUNTS -->
+            <div class="row row-cols-1 row-cols-md-4">
             {%for mount in total_mounts_info.keys()%}
             <div class="col">
-              <div class="card shadow text-white bg-dark mb-3">
-                  <div class="card-header" style="font-size: small;"><a>{{mount}} {%if total_mounts_info[mount][0][1] == 'collected'%}  <span style="color: yellow;">&#10003;</span>{%endif%}</a></div>
-                  <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
+              <div class="card text-center text-white bg-dark mb-3">
+                <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
+                  <div class="card-img-overlay p-1">
+                      {%if total_mounts_info[mount][0][1] == 'collected'%}<h6 class="card-title" style="color: chartreuse; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount}}</h6>{%endif%}
+                      {%if total_mounts_info[mount][0][1] == 'not_collected'%} <h6 class="card-title" style="color: grey;  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount}}</h6>{%endif%}
+                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{total_mounts_info[mount][0][2]}}</p>
+                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">Drops: {{total_mounts_info[mount][0][3][0]}} </p>
+                  </div>
               </div>
             </div>
             {%endfor%}
           </div>
         </div>
           <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-            <!-- MAIN BODY -->
-            <div class="row row-cols-1 row-cols-md-4" style="height:880px ; overflow:auto;">
+            <!-- COLLECTED MOUNTS -->
+            <div class="row row-cols-1 row-cols-md-4" >
               {%for mount in mounts%}
                   {%for key in mount.keys()%}
                       <div class="col">
-                          <div class="card shadow text-white bg-dark mb-3">
-                              <div class="card-header" style="font-size: small;"><a>{{key}}</a></div>
-                              <img src="{{mount[key]['media']}}" class="card-img-bottom">
+                          <div class="card text-center  text-white bg-dark mb-3">
+                            <img src="{{mount[key]['media']}}" class="card-img-bottom ">
+                            <div class="card-img-overlay">
+                              <h6 class="card-title" style="color: chartreuse; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{key}}</h6>
+                              <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount[key]['description']}}</p>
+                              <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">Drops: {{mount[key]['drops']}}</p>
+
+                            </div>
+                            
                           </div>
                       </div>
                   {%endfor%}
@@ -95,10 +125,25 @@ a.disabled_link {
             </div>
           </div>
           <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-            <h1>NOT COLLECTED</h1>
+            <!-- NOT COLLECTED MOUNTS -->
+            <div class="row row-cols-1 row-cols-md-4" >
+              {%for mount in total_mounts_info.keys()%}
+                {%if total_mounts_info[mount][0][1] == 'not_collected'%}
+                <div class="col">
+                  <div class="card text-center text-white bg-dark mb-3">
+                    <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
+                    <div class="card-img-overlay">
+                      <h6 class="card-title" style="color: grey; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount}}</h6>
+                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{total_mounts_info[mount][0][2]}}</p>
+                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">Drops: {{total_mounts_info[mount][0][3][0]}} </p>
+                    </div>
+                  </div>
+                </div>
+                {%endif%}
+              {%endfor%}
+            </div>
           </div>
         </div>
     </div>
 </div>
-
 {% endblock %}}

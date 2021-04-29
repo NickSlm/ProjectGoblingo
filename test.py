@@ -4,8 +4,14 @@ import os
 import datetime
 
 
-# connection = sqlite3.connect(r"D:\DATABASE\ape.db",check_same_thread=False)
-# cursor = connection.cursor()
+connection = sqlite3.connect(r"D:\DATABASE\ape.db",check_same_thread=False)
+cursor = connection.cursor()
+
+
+
+
+
+
 # cursor.execute("SELECT item_class from item_db")
 # a = cursor.fetchall()
 # with open(r"D:\ProjectGoblingo\item_class.txt", 'w') as filea:
