@@ -64,6 +64,7 @@ a.disabled_link {
 .card:hover .card-img-overlay{
   opacity: 1;
 }
+
 </style>
 <div class="row justify-content-md-center p-2" >
     <div class="col-lg">
@@ -93,10 +94,10 @@ a.disabled_link {
               <div class="card text-center text-white bg-dark mb-3">
                 <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
                   <div class="card-img-overlay p-1">
-                      {%if total_mounts_info[mount][0][1] == 'collected'%}<h6 class="card-title" style="color: chartreuse; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount}}</h6>{%endif%}
-                      {%if total_mounts_info[mount][0][1] == 'not_collected'%} <h6 class="card-title" style="color: grey;  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount}}</h6>{%endif%}
-                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{total_mounts_info[mount][0][2]}}</p>
-                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">Drops: {{total_mounts_info[mount][0][3][0]}} </p>
+                      {%if total_mounts_info[mount][0][1] == 'collected'%}<h6 class="card-title" style="color: yellow; ">{{mount}}</h6>{%endif%}
+                      {%if total_mounts_info[mount][0][1] == 'not_collected'%} <h6 class="card-title" style="color: grey;  ">{{mount}}</h6>{%endif%}
+                      <p class="text-start" style="color:chartreuse; font-size:x-small;">{{total_mounts_info[mount][0][2]}}</p>
+                      <p class="text-start" ><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
                   </div>
               </div>
             </div>
@@ -111,13 +112,11 @@ a.disabled_link {
                       <div class="col">
                           <div class="card text-center  text-white bg-dark mb-3">
                             <img src="{{mount[key]['media']}}" class="card-img-bottom ">
-                            <div class="card-img-overlay">
-                              <h6 class="card-title" style="color: chartreuse; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{key}}</h6>
-                              <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount[key]['description']}}</p>
-                              <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">Drops: {{mount[key]['drops']}}</p>
-
+                            <div class="card-img-overlay p-1">
+                              <h6 class="card-title" style="color: yellow;">{{key}}</h6>
+                              <p class="text-start" style="color:chartreuse; font-size:x-small; ">{{mount[key]['description']}}</p>
+                              <p class="text-start"><span style="color:chartreuse;">Drops:</span> {{mount[key]['drops']}}</p>
                             </div>
-                            
                           </div>
                       </div>
                   {%endfor%}
@@ -132,10 +131,10 @@ a.disabled_link {
                 <div class="col">
                   <div class="card text-center text-white bg-dark mb-3">
                     <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
-                    <div class="card-img-overlay">
-                      <h6 class="card-title" style="color: grey; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{mount}}</h6>
-                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">{{total_mounts_info[mount][0][2]}}</p>
-                      <p class="text-start" style="color:chartreuse; font-size:xx-small; text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;">Drops: {{total_mounts_info[mount][0][3][0]}} </p>
+                    <div class="card-img-overlay p-1">
+                      <h6 class="card-title" style="color: grey;">{{mount}}</h6>
+                      <p class="text-start" style="font-size:x-small;color:chartreuse">{{total_mounts_info[mount][0][2]}}</p>
+                      <p class="text-start"><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
                     </div>
                   </div>
                 </div>
