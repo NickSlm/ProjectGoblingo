@@ -1,0 +1,64 @@
+.card{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.2s ease-in-out;
+
+
+}
+.card:hover{
+    box-shadow: 0 5px 5px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+.pagination a {
+    font-size:x-large;
+  color: black;
+  float: right;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pagination a.active {
+    transform: scale(1.3);
+    color:turquoise;
+}
+
+.pagination a:hover:not(.active) {transform: scale(1.3);
+color:turquoise;}
+a.disabled_link {
+  /* Make the disabled links grayish*/
+  color: gray;
+  /* And disable the pointer events */
+  pointer-events: none;
+  
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  
+}
+
+.card-img-overlay{
+  opacity: 0;
+}
+/* When you mouse over the container, fade in the overlay title */
+.card:hover .card-img-overlay{
+  opacity: 1;
+
+}
+.card:hover .card-img-bottom{
+  opacity: 0.5;
+}
