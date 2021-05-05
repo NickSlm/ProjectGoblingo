@@ -4,47 +4,43 @@
 {%endblock%}
 {% block mounts %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_mounts.css') }}">
+<h4 class="text-info text-center">{{total_collected_mounts}} of {{total_mounts}} Mounts</h4>
 
 <div class="row justify-content-md-center p-2" >
     <div class="col-lg">
-      <!-- NAV LINKS -->
-      <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" >
+        <!-- NAV TABS -->
+        <ul class="nav nav-tabs mb-3" style="border-bottom:0px" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">All</button>
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">All</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Collected</button>
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Collected</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Not Collected</button>
+            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Not Collected</button>
           </li>
         </ul>
-        <!-- PROGRESS BAR -->
-        <div class="progress mb-3" style="height: 40px;">
-          <div class="progress-bar bg-success fs-5" role="progressbar" style="width: {{total_collected_mounts_percent}}%;" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100">{{total_collected_mounts_percent}}% ({{total_collected_mounts}}/{{total_mounts}})</div>
-        </div>
+        <button onclick="topFunction()" class="rounded-circle" id="myBtn" title="Go to top"></button>
         <!-- NAV CONTENT -->
-        <div class="tab-content" id="pills-tabContent">
-          <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-            <!-- ALL MOUNTS -->
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div class="row row-cols-1 row-cols-md-4">
-            {%for mount in total_mounts_info.keys()%}
-            <div class="col">
-              <div class="card text-center text-white bg-dark mb-3">
-                <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
-                  <div class="card-img-overlay p-1">
-                      {%if total_mounts_info[mount][0][1] == 'collected'%}<h6 class="card-title" style="color: yellow; ">{{mount}}</h6>{%endif%}
-                      {%if total_mounts_info[mount][0][1] == 'not_collected'%} <h6 class="card-title" style="color: grey;  ">{{mount}}</h6>{%endif%}
-                      <p class="text-start" style="color:chartreuse; font-size:x-small;">{{total_mounts_info[mount][0][2]}}</p>
-                      <p class="text-start" ><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
-                  </div>
+              {%for mount in total_mounts_info.keys()%}
+              <div class="col">
+                <div class="card text-center text-white bg-dark mb-3">
+                  <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
+                    <div class="card-img-overlay p-1">
+                        {%if total_mounts_info[mount][0][1] == 'collected'%}<h6 class="card-title" style="color: yellow; ">{{mount}}</h6>{%endif%}
+                        {%if total_mounts_info[mount][0][1] == 'not_collected'%} <h6 class="card-title" style="color: grey;  ">{{mount}}</h6>{%endif%}
+                        <p class="text-start" style="color:chartreuse; font-size:x-small;">{{total_mounts_info[mount][0][2]}}</p>
+                        <p class="text-start" ><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
+                    </div>
+                </div>
               </div>
+              {%endfor%}
             </div>
-            {%endfor%}
           </div>
-        </div>
-          <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-            <!-- COLLECTED MOUNTS -->
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="row row-cols-1 row-cols-md-4" >
               {%for mount in mounts%}
                   {%for key in mount.keys()%}
@@ -62,8 +58,7 @@
               {%endfor%}
             </div>
           </div>
-          <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-            <!-- NOT COLLECTED MOUNTS -->
+          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
             <div class="row row-cols-1 row-cols-md-4" >
               {%for mount in total_mounts_info.keys()%}
                 {%if total_mounts_info[mount][0][1] == 'not_collected'%}
@@ -82,6 +77,29 @@
             </div>
           </div>
         </div>
+
+       
     </div>
 </div>
+<script>
+//Get the button
+var mybutton = document.getElementById("myBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
 {% endblock %}}

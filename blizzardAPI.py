@@ -113,17 +113,12 @@ class Blizzard:
         mount_collection = resp.json()
         return mount_collection['mounts']
 
-    def updatet(self, id):
+    def updatet(self):
         auth_token = self._get_token()
-        url = f"https://eu.api.blizzard.com/data/wow/mount/{id}?namespace=static-eu&locale=en_US&access_token={auth_token}"
+        url = f"https://eu.api.blizzard.com/data/wow/media/creature-display/11641?namespace=static-9.0.5_37760-eu&locale=en_US&access_token={auth_token}"
         resp =  requests.get(url)
         mount_collection = resp.json()
-        try:
-            return mount_collection['source']['name']
-        except KeyError:
-            return "..."
-
-
+        print(mount_collection)
 
 
 
