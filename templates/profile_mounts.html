@@ -4,81 +4,34 @@
 {%endblock%}
 {% block mounts %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_mounts.css') }}">
-<h4 class="text-info text-center">{{total_collected_mounts}} of {{total_mounts}} Mounts</h4>
+<h4 class="text-center" style="color:#b1997f">{{total_collected_mounts}} of {{total_mounts}} Mounts</h4>
 
 <div class="row justify-content-md-center p-2" >
     <div class="col-lg">
         <!-- NAV TABS -->
-        <ul class="nav nav-tabs mb-3" style="border-bottom:0px" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">All</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Collected</button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Not Collected</button>
-          </li>
-        </ul>
+        <div id="myBtnContainer">
+          <button class="btnn actives" onclick="filterSelection('all')"> Show all</button>
+          <button class="btnn" onclick="filterSelection('acquired')"> Acquired</button>
+          <button class="btnn" onclick="filterSelection('not collected')"> Not Acquired</button>
+        </div>
         <button onclick="topFunction()" class="rounded-circle" id="myBtn" title="Go to top"></button>
         <!-- NAV CONTENT -->
-        <div class="tab-content" id="myTabContent">
-          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="row row-cols-1 row-cols-md-4">
-              {%for mount in total_mounts_info.keys()%}
-              <div class="col">
-                <div class="card text-center text-white bg-dark mb-3">
-                  <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
-                    <div class="card-img-overlay p-1">
-                        {%if total_mounts_info[mount][0][1] == 'collected'%}<h6 class="card-title" style="color: yellow; ">{{mount}}</h6>{%endif%}
-                        {%if total_mounts_info[mount][0][1] == 'not_collected'%} <h6 class="card-title" style="color: grey;  ">{{mount}}</h6>{%endif%}
-                        <p class="text-start" style="color:chartreuse; font-size:x-small;">{{total_mounts_info[mount][0][2]}}</p>
-                        <p class="text-start" ><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
-                    </div>
-                </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4 py-2">
+          {%for mount in total_mounts_info.keys()%}
+          <div class="col filterDiv {{total_mounts_info[mount][0][1]}}">
+            <div class="card border border-1 border-secondary text-center text-white bg-dark mb-3">
+              <div class="card-header text-center">
+                <h6 class="card-title" style="color: #f8b700;">{{mount}}</h6>
+            </div>
+              <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom" >
+               <div class="card-img-overlay d-flex flex-column justify-content-end p-1">
+                <p class="text-start" style="color:chartreuse; font-size:small;">"{{total_mounts_info[mount][0][2]}}"</p>
+                <p class="text-start" ><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
               </div>
-              {%endfor%}
             </div>
           </div>
-          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="row row-cols-1 row-cols-md-4" >
-              {%for mount in mounts%}
-                  {%for key in mount.keys()%}
-                      <div class="col">
-                          <div class="card text-center  text-white bg-dark mb-3">
-                            <img src="{{mount[key]['media']}}" class="card-img-bottom ">
-                            <div class="card-img-overlay p-1">
-                              <h6 class="card-title" style="color: yellow;">{{key}}</h6>
-                              <p class="text-start" style="color:chartreuse; font-size:x-small; ">{{mount[key]['description']}}</p>
-                              <p class="text-start"><span style="color:chartreuse;">Drops:</span> {{mount[key]['drops']}}</p>
-                            </div>
-                          </div>
-                      </div>
-                  {%endfor%}
-              {%endfor%}
-            </div>
-          </div>
-          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-            <div class="row row-cols-1 row-cols-md-4" >
-              {%for mount in total_mounts_info.keys()%}
-                {%if total_mounts_info[mount][0][1] == 'not_collected'%}
-                <div class="col">
-                  <div class="card text-center text-white bg-dark mb-3">
-                    <img src="{{total_mounts_info[mount][0][0]}}" class="card-img-bottom">
-                    <div class="card-img-overlay p-1">
-                      <h6 class="card-title" style="color: grey;">{{mount}}</h6>
-                      <p class="text-start" style="font-size:x-small;color:chartreuse">{{total_mounts_info[mount][0][2]}}</p>
-                      <p class="text-start"><span style="color:chartreuse;">Drops:</span> {{total_mounts_info[mount][0][3][0]}} </p>
-                    </div>
-                  </div>
-                </div>
-                {%endif%}
-              {%endfor%}
-            </div>
-          </div>
+          {%endfor%}
         </div>
-
-       
     </div>
 </div>
 <script>
@@ -100,6 +53,49 @@ function scrollFunction() {
 function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
+}
+
+filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("filterDiv");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btnn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("actives");
+    current[0].className = current[0].className.replace(" actives", "");
+    this.className += " actives";
+  });
 }
 </script>
 {% endblock %}}

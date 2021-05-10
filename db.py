@@ -89,10 +89,10 @@ def get_total_mounts_info(profile_token):
     for mount in mounts_data_all:
         for coll_mount in mount_list_collected:
             if mount[0] == coll_mount['mount']['name']:
-                mounts[mount[0]].append((mount[1],'collected',mount[2],[mount[3]]))
+                mounts[mount[0]].append((mount[1],'acquired',mount[2],[mount[3]]))
                 break
         else:
-            mounts[mount[0]].append((mount[1],'not_collected',mount[2],[mount[3]]))
+            mounts[mount[0]].append((mount[1],'not collected',mount[2],[mount[3]]))
     return mounts, total_mounts
 
 

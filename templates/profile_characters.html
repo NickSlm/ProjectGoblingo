@@ -13,13 +13,44 @@
     box-shadow: 5px 6px 6px 2px #e9ecef;
     transform: scale(1.1)
 }
+.btnn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #f8b700;
+}
+
+.btnn:hover {
+  background-color: #f8b700;
+  color: #211510;
+
+}
+
+.btnn.actives {
+  background-color: #f8b700;
+  color: #211510;
+}
+.col{
+  display: none;
+}
+.show {
+  display: block;
+}
 </style>
-{%for key in char_list.keys()%}
-<h2 class="text-light p-1" style="font-family: Warcraft; color: #FFE4E1;">{{key}}</h2>
-<div class="row row-cols-1 row-cols-md-4 g-4">
-        {%for char in char_list[key]%}
-            {%if char[1] == 'Alliance' %}
-                <div class="col">
+<div id="myBtnContainer">
+    <button class="btnn actives" onclick="filterSelection('all')"> Show all</button>
+    {%for key in char_list.keys()%}
+    <button class="btnn" onclick="filterSelection('{{key}}')"> {{key}}</button>
+    {%endfor%}
+</div>
+
+<div class="row row-cols-1 row-cols-md-4 g-4 py-2">
+        {%for server in char_list.keys()%}
+        {%for char in char_list[server]%}
+            {%if char[1] == 'Alliance'%}
+                <div class="col filterDiv {{server}}">
                     <div class="card shadow" style="background-color: #162C57;">
                         <img src={{char[4]}} class="card-img-top">
                         <div class="card-body">
@@ -27,29 +58,72 @@
                                 <li class="list-group-item bg-transparent"><b>Name:</b> {{char[0]}}</li>
                                 <li class="list-group-item bg-transparent"><b>Class:</b> {{char[2]}} </li>
                                 <li class="list-group-item bg-transparent"><b>Level:</b> {{char[3]}} </li>
-                                <li class="list-group-item bg-transparent"><b>Gold:</b> {{char[5]}}</li>
+                                <li class="list-group-item bg-transparent"><b>Gold:</b> {{char[5]}} </li>
                             </ul>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                         </div>
                     </div>
                 </div>
             {%elif char[1] == 'Horde'%}
-            <div class="col">
-                <div class="card shadow" style="background-color: #8C1616;">
-                    <img src={{char[4]}} class="card-img-top">
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush bg-transparent" id="myUL" style="color: #d8d1ca;">
-                            <li class="list-group-item bg-transparent"><b>Name:</b> {{char[0]}}</li>
-                            <li class="list-group-item bg-transparent"><b>Class:</b> {{char[2]}} </li>
-                            <li class="list-group-item bg-transparent"><b>Level:</b> {{char[3]}} </li>
-                            <li class="list-group-item bg-transparent"><b>Gold:</b> {{char[5]}}</li>
-                        </ul>
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <div class="col filterDiv {{server}}">
+                    <div class="card shadow" style="background-color: #8C1616;">
+                        <img src={{char[4]}} class="card-img-top">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush bg-transparent" id="myUL" style="color: #d8d1ca;">
+                                <li class="list-group-item bg-transparent"><b>Name:</b> {{char[0]}}</li>
+                                <li class="list-group-item bg-transparent"><b>Class:</b> {{char[2]}} </li>
+                                <li class="list-group-item bg-transparent"><b>Level:</b> {{char[3]}} </li>
+                                <li class="list-group-item bg-transparent"><b>Gold:</b> {{char[5]}} </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
             {%endif%}
         {%endfor%}
+        {%endfor%}
 </div>
-{%endfor%}
+
+<script>
+    filterSelection("all")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("filterDiv");
+  if (c == "all") c = "";
+  for (i = 0; i < x.length; i++) {
+    w3RemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+  }
+}
+
+function w3AddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+  }
+}
+
+function w3RemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1);     
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+// Add active class to the current button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btnn");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function(){
+    var current = document.getElementsByClassName("actives");
+    current[0].className = current[0].className.replace(" actives", "");
+    this.className += " actives";
+  });
+}
+</script>
 {% endblock %}}

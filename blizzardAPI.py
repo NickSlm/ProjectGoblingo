@@ -115,12 +115,10 @@ class Blizzard:
 
     def updatet(self):
         auth_token = self._get_token()
-        url = f"https://eu.api.blizzard.com/data/wow/media/creature-display/11641?namespace=static-9.0.5_37760-eu&locale=en_US&access_token={auth_token}"
+        url = f"https://eu.api.blizzard.com/data/wow/item/180733?namespace=static-9.0.5_37760-eu&locale=en_US&access_token={auth_token}"
         resp =  requests.get(url)
         mount_collection = resp.json()
         print(mount_collection)
-
-
 
 # class BlizzardData(Blizzard):
 #     def __init__(self):
